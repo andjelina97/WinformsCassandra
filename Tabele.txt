@@ -1,0 +1,127 @@
+
+//Admini se loguje preko svog identifikatora i lozinke (password). 
+//On moze da dodaje nove vlasnike.
+
+CREATE TABLE "Admin" (
+  "id" text,
+  password text,
+	name text,
+	surname text,
+	phonenumber text,
+  PRIMARY KEY ("id")
+)
+WITH
+  bloom_filter_fp_chance=0.01
+  AND compaction={ 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+  AND compression={ 'sstable_compression' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+  AND caching='{"keys":"ALL", "rows_per_partition":"NONE"}';
+
+//Root administrator moze da dodaje i druge administratore
+INSERT INTO "Administrator" ("id", password, name, surname, phonenumber)
+VALUES ('root1','1234','root','super','061 722 95 19');
+
+
+//User moze da se uloguje pomocu svog korisnickog imena i lozinke. On moze da dodaje i brise Aplikacije,
+//za koje vrsi logovanje, pored toga postoji pretraga logovanih podataka po razlicitim kriterijumima
+
+  CREATE TABLE "User" (
+    "id" text,
+    "username" text,
+    password text,
+    "company" text,
+	  email text,
+    PRIMARY KEY ("username","id")
+)
+WITH
+  bloom_filter_fp_chance=0.01
+  AND compaction={ 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+  AND compression={ 'sstable_compression' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+  AND caching='{"keys":"ALL", "rows_per_partition":"NONE"}';
+
+
+  INSERT INTO "User" ("id", username, password, company, email)
+VALUES ('root1','root','1234','Loger podataka','andjela@gmail.com');
+
+//Postoji test aplikacija WineShop koja pripada ovom useru. On moze da pregleda podatke logovanja iz te aplikacije.
+
+INSERT INTO "User" ("id", username, password, company, email)
+VALUES ('pocetno1','vlasnikVinarije','1234','vinarija Tosic','andjela@gmail.com');
+
+ 
+
+//Application
+//ID aplikacije je id usera + naziv aplikacije
+    CREATE TABLE "Application" (
+    "ownerOfApp" text,
+    "id" text,
+    "appName" text,
+    "appType" text,
+    "purposeOfApp" text,
+    "termsOfUse" text,
+    PRIMARY KEY ("ownerOfApp","id")
+)
+WITH
+  bloom_filter_fp_chance=0.01
+  AND compaction={ 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+  AND compression={ 'sstable_compression' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+  AND caching='{"keys":"ALL", "rows_per_partition":"NONE"}';
+
+//Ova aplikacija je reprezentacija aplikacije za vlasnike(user-e). U njoj se loguju aktivnosti vlasnika.
+  INSERT INTO "Application" ("id", "ownerOfApp", "appName", "appType", "purposeOfApp", "termsOfUse")
+      VALUES ('root1#logovanjePodataka','root1','logovanjeUsera','root aplikacija','Log apl. vlasnik.', 'Dozvoljeno za adm.');
+
+//Ova aplikacija je reprezentacija aplikacije za administratore. U njoj se loguju aktivnosti administratora.
+  INSERT INTO "Application" ("id", "ownerOfApp", "appName", "appType", "purposeOfApp", "termsOfUse")
+      VALUES ('root1#logovanjeAdministratora','root1','logovanjeAdministratora','root aplikacija','Log apl. adm..', 'Dozvoljeno za adm.');
+
+//Aplikacija prodaja vina.
+  INSERT INTO "Application" ("id", "ownerOfApp", "appName", "appType", "purposeOfApp", "termsOfUse")
+      VALUES ('pocetno1#prodajaVina','pocetno1','prodajaVina','prodaja','Online prodaja vina', 'Slobodno');
+
+  
+
+
+//LogView
+  //compId je Id vlasnika + appName + username
+  CREATE TABLE "LogView" (
+  "compId" text,
+  "id" uuid,
+  "subjectName" text,
+  "viewType" text,
+  time text,
+  PRIMARY KEY ("compId","id")
+)
+WITH
+  bloom_filter_fp_chance=0.01
+  AND compaction={ 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+  AND compression={ 'sstable_compression' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+  AND caching='{"keys":"ALL", "rows_per_partition":"NONE"}';
+
+  
+
+//LogEvent
+    CREATE TABLE "LogEvent" (
+    "compId" text,
+    "id" uuid,
+    "eventType" text,
+     time text,
+    PRIMARY KEY ("compId","id")
+)
+WITH
+  bloom_filter_fp_chance=0.01
+  AND compaction={ 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+  AND compression={ 'sstable_compression' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+  AND caching='{"keys":"ALL", "rows_per_partition":"NONE"}';
+  
+
+//Customer
+  CREATE TABLE "Customer" (
+  "applicationId" text,
+  "username" text,
+  PRIMARY KEY ("applicationId","username")
+)
+WITH
+bloom_filter_fp_chance=0.01
+AND compaction={ 'class' : 'org.apache.cassandra.db.compaction.SizeTieredCompactionStrategy' }
+AND compression={ 'sstable_compression' : 'org.apache.cassandra.io.compress.LZ4Compressor' }
+AND caching='{"keys":"ALL", "rows_per_partition":"NONE"}';

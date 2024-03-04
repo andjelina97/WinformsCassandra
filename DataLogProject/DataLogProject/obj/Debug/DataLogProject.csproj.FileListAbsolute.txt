@@ -1,0 +1,9 @@
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\bin\Debug\DataLogProject.exe.config
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\bin\Debug\DataLogProject.exe
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\bin\Debug\DataLogProject.pdb
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\obj\Debug\DataLogProject.csproj.AssemblyReference.cache
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\obj\Debug\DataLogProject.Properties.Resources.resources
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\obj\Debug\DataLogProject.csproj.GenerateResource.cache
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\obj\Debug\DataLogProject.csproj.CoreCompileInputs.cache
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\obj\Debug\DataLogProject.exe
+F:\GitHub-repos\CassandraProject\DataLogProject\DataLogProject\obj\Debug\DataLogProject.pdb
